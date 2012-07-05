@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <script src="JS/jquery-1.4.2.min.js" type="text/javascript"></script>
+    <script src="JS/json2.js" type="text/javascript"></script>
+    <script src="JS/date.format.js" type="text/javascript"></script>
+    <link href="Styles/mcss.css" rel="stylesheet" type="text/css" />
+    <title></title>
+    <script type="text/javascript">
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        var querystring = getUrlVars()["value"];
+        Paramdata = { "SchoolId": querystring }
+        function GetSchoolInfo() {
+            $.ajax({
+                url: 'http://2bvision.com/projectx/WebCommunicator/WebService.asmx/GetSchool_SchoolIdWise',
+                type: 'POST',
+                data: JSON.stringify(Paramdata),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var Kewords = {};
+                    Kewords = response.d;
+                    document.getElementById("imgSchoolLogo").src = "http://2bvision.com/projectx/superadmin/SchoolLogo/" + Kewords.SchoolLogo;
+                    document.getElementById("divTagLine").innerHTML = Kewords.SchoolName;
+                },
+                failure: function (errMsg) {
+                    $('#errorMessage').text(errMsg); //errorMessage is id of the div
+                }
+            });
+        }
+
+        function GetCalender() {
+            $.ajax({
+                url: 'http://2bvision.com/projectx/WebCommunicator/WebService.asmx/GetCalendar_SchoolWise',
+                type: 'POST',
+                data: JSON.stringify(Paramdata),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var Kewords = {};
+                    Kewords = response.d;
+                    for (i = 0; i < Kewords.length; i++) {
+                        var milli = '';
+                        milli = Kewords[i].EventStartDate.replace(/\/Date\((-?\d+)\)\//, '$1');
+                        milli2 = Kewords[i].EventEndDate.replace(/\/Date\((-?\d+)\)\//, '$1');
+                        var date1 = new Date(parseInt(milli)).format("dd mmm,yyyy (HH:mm:ss)");
+                        var date2 = new Date(parseInt(milli2)).format("dd mmm,yyyy (HH:mm:ss)");
+
+                        document.getElementById("dlCalender").innerHTML += "<dt>" + Kewords[i].CalendarEventTitle + "</dt><dd><span style='color:red;'>" + date1 + " - " + date2 + "</span><br />" + Kewords[i].CalendarEventDescription + "</dd>";
+
+                    }
+
+                },
+                failure: function (errMsg) {
+                    $('#errorMessage').text(errMsg); //errorMessage is id of the div
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $("a").click(function (event) {
+                var linkID = event.target.id;
+
+                if (linkID == 'lnkAtaglance') {
+                    window.location.href = "home.htm?value=" + querystring;
+                }
+                else if (linkID == 'lnkNews') {
+                    window.location.href = "news.htm?value=" + querystring;
+                }
+                else if (linkID == 'lnkCalender') {
+                    window.location.href = "calendar.htm?value=" + querystring;
+                }
+                else if (linkID == 'lnkGallery') {
+                    window.location.href = "gallery.htm?value=" + querystring;
+                }
+                else if (linkID == 'lnkContacts') {
+                    window.location.href = "contacts.htm?value=" + querystring;
+                }
+                else if (linkID == 'lnkResources') {
+                    window.location.href = "resources.htm?value=" + querystring;
+                }
+            })
+        });
+
+        function GetFunctions() {
+            GetSchoolInfo();
+            GetCalender();
+        }
+      
+    </script>
+</head>
+<body onload="GetFunctions()">
+    <div id="wraper">
+        <div id="container">
+            <div class="clearfix">
+                <div id="logo">
+                    <a href="#" title="#">
+                        <img id="imgSchoolLogo" alt=""/></a></div>
+                <!-- tagline starts -->
+                <div id="divTagLine" class="tagline" runat="server">
+                </div>
+                <!-- tag line ends -->
+            </div>
+            <div id="content" class="clearfix">
+                <div id="contentLeft">
+                    <div class="stab">
+                        <ul id="nav" runat="server">
+                            <li class="navHead">
+                                <h3>
+                                    Navigation</h3>
+                            </li>
+                            <li><a target="_self" id="lnkAtaglance" class="glance">At a Glance</a> </li>
+                             <li><a target="_self" id="lnkNews" class="news">News</a></li>
+                            <li class="current_page_item"><a target="_self" id="lnkCalender" class="callender">Calendar</a></li>
+                            <li><div id="contentRigh">
+                                <!-- content area starts-->
+                                <div class="content">
+                                    <div class="contentInfo ancher clearfix">
+                                        <h6>Calendar
+                                        </h6>
+                                        <dl class="dlist" id="dlCalender">
+                                        </dl>
+                                    </div>
+                                </div>
+                                <!-- content area ends -->
+                            </div></li>
+                            <li><a target="_self" id="lnkGallery" class="galery">Gallery</a></li>
+                            <li><a target="_self" id="lnkContacts" class="contact">Contacts</a></li>
+                            <li><a target="_self" id="lnkResources" class="resources">Resources</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- footer Wrapper ends -->
+                <div class="footer_wrap">
+                    <div class="changeSchool">
+                        <a target="_self" href="index.htm">Click here to change your school</a></div>
+                    <div class="copyright">
+                        Copyright @ 2012 Intouch communicator, All rights reserved</div>
+                </div>
+                <!-- footer wrappe ends -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>
