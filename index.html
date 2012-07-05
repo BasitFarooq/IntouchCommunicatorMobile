@@ -38,7 +38,7 @@
                     alert('Please select a school');
                 }
                 else {
-                    window.location.href = "home.htm?value=" + selectedvalue;
+                    window.location.href = "home.html?value=" + selectedvalue;
                 }
             })
         });
@@ -47,22 +47,22 @@
             $("a").click(function (event) {
                 var linkID = event.target.id;
                 if (linkID == 'lnkAtaglance') {
-                    window.location.href = "home.htm?value=" + querystring;
+                    window.location.href = "home.html?value=" + querystring;
                 }
                 else if (linkID == 'lnkNews') {
-                    window.location.href = "news.htm?value=" + querystring;
+                    window.location.href = "news.html?value=" + querystring;
                 }
                 else if (linkID == 'lnkCalender') {
-                    window.location.href = "calendar.htm?value=" + querystring;
+                    window.location.href = "calendar.html?value=" + querystring;
                 }
                 else if (linkID == 'lnkGallery') {
-                    window.location.href = "gallery.htm?value=" + querystring;
+                    window.location.href = "gallery.html?value=" + querystring;
                 }
                 else if (linkID == 'lnkContacts') {
-                    window.location.href = "contacts.htm?value=" + querystring;
+                    window.location.href = "contacts.html?value=" + querystring;
                 }
                 else if (linkID == 'lnkResources') {
-                    window.location.href = "resources.htm?value=" + querystring;
+                    window.location.href = "resources.html?value=" + querystring;
                 }
 
             })
